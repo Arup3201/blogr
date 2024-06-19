@@ -10,16 +10,14 @@ The application contains AI-powered recommendation system for making personalize
 
 ## Requirements of the application
 
-<img src="./app-design-assets/requirements.png" title="" alt="" data-align="center">
+<img title="" src="./app-ideas/requirements.png" alt="" data-align="center">
 
 ## Data Flow Diagram
 
-<img title="" src="./app-design-assets/DFD-preq.png" alt="" width="310" data-align="center">
+<img title="" src="./app-ideas/dfd-preq.png" alt="" width="310" data-align="center">
 
 ### Context Diagram
 
-![](./app-design-assets/dfd-context.png)
+![](./app-ideas/dfd-l0.png)
 
 ### Level 1 DFD
-
-![](./app-design-assets/dfd-l1.png)
