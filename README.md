@@ -21,3 +21,11 @@ The application contains AI-powered recommendation system for making personalize
 ![](./app-ideas/dfd-l0.png)
 
 ### Level 1 DFD
+
+![](./app-ideas/dfd-l1.png)
+
+## Class Diagram
+
+### Class Diagram Elements
+
+![](./app-ideas/class-preq.png)
