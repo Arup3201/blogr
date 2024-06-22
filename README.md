@@ -8,13 +8,11 @@ Blogr.ai offers multiple solutions in the application that makes both authors an
 
 The application contains AI-powered recommendation system for making personalized list of blogs that the readers will find interesting. Along with this, the application supports voice to text conversion that makes authors write the blogs with their voice only. Application uses natural language processing to remove unhealthy or harmful contents in the application. It also tries to understand the sentiment of the comments in any blog to gauge the mood the application provides. The articles support interactive contents like poll and quiz to make readers engage with the content and make their learning more fun.
 
-## Requirements of the application
+## Requirements
 
 <img title="" src="./app-ideas/requirements.png" alt="" data-align="center">
 
 ## Data Flow Diagram
-
-<img title="" src="./app-ideas/dfd-preq.png" alt="" width="310" data-align="center">
 
 ### Context Diagram
 
@@ -26,6 +24,4 @@ The application contains AI-powered recommendation system for making personalize
 
 ## Class Diagram
 
-### Class Diagram Elements
-
-![](./app-ideas/class-preq.png)
+![](./app-ideas/class-diagram.png)
