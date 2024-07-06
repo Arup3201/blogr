@@ -74,48 +74,62 @@ def create_blog():
         topic = request.form['topic']
         subtopic = request.form['subtopic']
         tags = request.form['tags']
-
-        form_content = request.form.get('content', '')
-
-        # The filename is the next id after the last added blog id with .md extension as I am storing it as markdown
-        last_added_blog = Blog.query.order_by(Blog.blog_id.desc()).first()
-        if not last_added_blog:
-            filename = '1.md'
-        else:
-            filename = str(last_added_blog.blog_id + 1) + '.md'
+        
+        blog = Blog(author_id=current_user.id, title=title, topic=topic, subtopic=subtopic, tags=tags)
+        db.session.add(blog)
+        
+        try:
+            db.session.commit()
             
-        # Check whether the folder exists or not
-        filedir = os.path.join(Path(current_app.root_path).parent, current_app.config['BLOGS_FOLDER'])
-        if not os.path.exists(filedir):
-            os.makedirs(filedir)
+            # Get the filename as the blog id
+            filename = str(blog.blog_id) + '.md'
+            
+            # Check whether the folder exists or not
+            filedir = os.path.join(Path(current_app.root_path).parent, current_app.config['BLOGS_FOLDER'])
+            
+            if not os.path.exists(filedir):
+                os.makedirs(filedir)
 
-        filepath = os.path.join(filedir, filename)
-        
-        # BUG : Saving file before session commit creates the file even if some database error happens
-        
-        # Save the content in the filename according to whether it is coming as a form input / file upload
-        if form_content:
-            with open(filepath, 'w') as f:
-                f.write(form_content)
-        else:
-            if 'content' not in request.files:
+            filepath = os.path.join(filedir, filename)
+            
+            if 'content' in request.form:
+                content = request.form['content']
+                with open(filepath, 'w') as f:
+                    f.write(content)
+
+            elif 'content' in request.files:
+                content = request.files['content']
+                
+                if allowed_file(content.filename):
+                    content.save(filepath)
+                else:
+                    jsonify({'message': 'Unsupported file format.'}), 409
+
+            else:
                 return jsonify({'message': 'You can\'t keep the content empty.'}), 409
             
-            file_content = request.files['content']
-            if allowed_file(file_content.filename):
-                file_content.save(filepath)
+            return jsonify({'message': 'Blog created successfully'}), 201
         
-        if os.path.exists(filepath):
-            # Save the blog with the given data
-            blog = Blog(author_id=current_user.id, title=title, content=filepath, topic=topic, subtopic=subtopic, tags=tags)
-            db.session.add(blog)
-            
-            try:
-                db.session.commit()
-                return jsonify({'message': 'Blog created successfully'}), 201
-            except:
-                return jsonify({'message': 'Blog could not be created.'}), 409
-        else:
-            return jsonify({'message': 'Unable to save the file in the system.'}), 409
-        
+        except:
+            return jsonify({'message': 'Blog could not be created.'}), 409
+
     return jsonify({'message': f'{request.method} is not handled on this end point. Please try with POST requests.'}), 404
+
+@blog_bp.route('/view_blog', methods=['GET'])
+@login_required
+def view_blog():
+    blog_id = request.args.get('id', '')
+    
+    if blog_id != '':
+        blog_id = int(blog_id)
+        blog = db.session.execute(db.select(Blog).where(Blog.blog_id==blog_id)).scalar()
+        
+        if blog:
+            filename = str(blog_id)+'.md'
+            
+            with open(os.path.join(current_app.config['BLOGS_FOLDER'], filename), 'r') as f:
+                content = f.read()
+            
+            return jsonify({'title': blog.title, 'author': blog.author_id, 'content': content, 'topic': blog.topic, 'subtopic': blog.subtopic, 'tags': blog.tags, 'views': blog.views, 'likes': blog.likes, 'created': blog.published, 'updated': blog.updated}), 201
+        else:
+            return jsonify({'message': 'Blog does not exists.'}), 404

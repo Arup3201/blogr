@@ -22,7 +22,6 @@ class Blog(db.Model):
     blog_id = Column(Integer, primary_key=True, autoincrement=True)
     author_id = Column(Integer, nullable=False)
     title = Column(String(100), nullable=False)
-    content = Column(String(100), nullable=False)
     topic = Column(String(100), nullable=False)
     subtopic = Column(String(100), nullable=False)
     tags = Column(String(100), nullable=False)
