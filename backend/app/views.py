@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import os
 from pathlib import Path
-from app.models import db, User, Blog
+from app.models import db, User, Blog, Comment
 
 auth_bp = Blueprint('auth', __name__)
 blog_bp = Blueprint('blog', __name__)
@@ -46,7 +46,6 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    # do stuff
     return jsonify({'message': 'You need to login first.'}), 404
 
 @auth_bp.route('/logout', methods=['GET', 'POST'])
@@ -118,9 +117,11 @@ def create_blog():
 @blog_bp.route('/view_blog', methods=['GET'])
 @login_required
 def view_blog():
-    blog_id = request.args.get('id', '')
-    
-    if blog_id != '':
+    if request.method == 'GET':
+        blog_id = request.args.get('id', '')
+        if not blog_id:
+            return jsonify({'message': 'blog id missing in the request'})
+        
         blog_id = int(blog_id)
         blog = db.session.execute(db.select(Blog).where(Blog.blog_id==blog_id)).scalar()
         
@@ -132,4 +133,47 @@ def view_blog():
             
             return jsonify({'title': blog.title, 'author': blog.author_id, 'content': content, 'topic': blog.topic, 'subtopic': blog.subtopic, 'tags': blog.tags, 'views': blog.views, 'likes': blog.likes, 'created': blog.published, 'updated': blog.updated}), 201
         else:
-            return jsonify({'message': 'Blog does not exists.'}), 404
+            return jsonify({'message': 'Blog does not exist'}), 404
+
+@blog_bp.route('/create_comment', methods=['POST'])
+@login_required
+def create_comment():
+    if request.method == 'POST':
+        blog_id = request.args.get('blog_id', '')
+        if not blog_id:
+            return jsonify({'message': 'Need a blog id'}), 404
+        
+        user_id = request.args.get('user_id', '')
+        if not user_id:
+            return jsonify({'message': 'Need a user id'}), 404
+        
+        comment_content = request.form.get('comment', '')
+        if not comment_content:
+            return jsonify({'message': 'Need a comment body'}), 404
+        
+        blog_id = int(blog_id)
+        user_id = int(user_id)
+        comment = Comment(blog_id=blog_id, user_id=user_id, comment=comment_content)
+        db.session.add(comment)
+        
+        try:
+            db.session.commit()
+            return jsonify({'message': 'Comment saved'}), 201
+        except:
+            return jsonify({'message': 'Failed to save the comment'}), 404
+        
+@blog_bp.route('/get_comments', methods=['GET'])
+def get_comments():
+    if request.method == 'GET':
+        blog_id = request.args.get('blog_id', '')
+        if not blog_id:
+            return jsonify({'message': 'blog id missing from request arguments.'})
+        
+        blog_id = int(blog_id)
+        comments = db.session.execute(db.select(User, Comment).join(User, User.id==Comment.user_id).where(Comment.blog_id==blog_id))
+        
+        response = []
+        for comment in comments:
+            response.append({'user': comment.User.username, 'comment': comment.Comment.comment, 'created': comment.Comment.commented})
+        
+        return jsonify(response), 201

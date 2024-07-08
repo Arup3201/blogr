@@ -1,0 +1,70 @@
+/* 
+COLORS:
+Main Color: #1971c2
+Tints: #339af0, #74c0fc
+Shaedes: #1864ab
+Whites: #eee
+Blacks:
+
+FONTS:
+Button: 1.2rem
+Input: 1rem
+
+SHADOW: 4px 8px
+BORDER: 1px
+BORDER RADIUS: 4px 8px
+PADDING, MARGIN: 0.5rem, 1rem
+
+*/
+
+/* Fonts: Merriweather(Serif) & Montserrat(Sans-Serif) */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  font-family: Montserrat, Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /*color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  font-family: Montserrat, Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  background-color: #1971c2;
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+
+  border: 0;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: 200ms all;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header img {
+  height: 3rem;
+  object-fit: cover;
+}
+
+header h1 {
+  margin-left: 1rem;
+  font-size: 3rem;
+}
