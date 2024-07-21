@@ -1,27 +1,11 @@
-![](./logo.png)
+<img src="./logo.png" alt="Blogr.AI logo" height="50px"/>
 
-# Learning with Everything: blogr.ai
+# Blogr.AI : An application for collaborative blogging
 
-Blogr.ai is a web application built with the intent to deliver blogs related to vast topics that will make the readers learn and grow on those topics with articles written by outstanding authors.
+**Features**
 
-Blogr.ai offers multiple solutions in the application that makes both authors and readers life better for making contents and learning.
+1. _Real-Time Collaboration_:
 
-The application contains AI-powered recommendation system for making personalized list of blogs that the readers will find interesting. Along with this, the application supports voice to text conversion that makes authors write the blogs with their voice only. Application uses natural language processing to remove unhealthy or harmful contents in the application. It also tries to understand the sentiment of the comments in any blog to gauge the mood the application provides. The articles support interactive contents like poll and quiz to make readers engage with the content and make their learning more fun.
-
-## Requirements
-
-<img title="" src="./app-ideas/requirements.png" alt="" data-align="center">
-
-## Data Flow Diagram
-
-### Context Diagram
-
-![](./app-ideas/dfd-l0.png)
-
-### Level 1 DFD
-
-![](./app-ideas/dfd-l1.png)
-
-## Class Diagram
-
-![](./app-ideas/class-diagram.png)
+- Allows multiple users to edit the same blog post simultaneously.
+- Supports real-time syncing of changes, ensuring that all collaborators see updates as they happen.
+- Users can leave comments/suggestions on specific parts of the document.

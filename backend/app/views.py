@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import os
+import json
 from pathlib import Path
 from app.models import db, User, Blog, Comment
 
@@ -13,8 +14,13 @@ login_manager = LoginManager()
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method=='POST':
-        uname = request.form['username']
-        password = request.form['password']
+        data = json.loads(request.data.decode('utf-8'))
+        uname = data.get('username')
+        password = data.get('password')
+        
+        if not uname or not password:
+            return jsonify({'message': 'Need credentials'}), 400
+        
         user = db.session.execute(db.select(User).where(User.username==uname)).scalar()
         
         if user and check_password_hash(user.password, password):
@@ -29,14 +35,14 @@ def login():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method=='POST':
-        user = User(username=request.form['username'], email=request.form['email'], password=generate_password_hash(request.form['password']))
+        data = json.loads(request.data.decode('utf-8'))
+        user = User(username=data['username'], email=data['email'], password=generate_password_hash(data['password']))
         db.session.add(user)
-        
         try:
             db.session.commit()
             return jsonify({'message': 'Registration Successful'}), 201
         except:
-            return jsonify({'message': 'Registration Failed.', 'Reasons': '1. Please make sure no field values are empty. Fields: username, email, password.\n2.Other user with same username/email is present in the database'}), 409
+            return jsonify({'message': 'Registration Failed.'}), 409
     
     return jsonify({'message': f'{request.method} is not handled on this end point. Please try with POST requests.'}), 404
     

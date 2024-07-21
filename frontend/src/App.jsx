@@ -1,22 +1,18 @@
-import { Header } from "./components/Header.jsx";
-import AuthContainer from "./components/AuthContainer/AuthContainer";
-import { LOGIN_META_DATA } from "./data";
-import logoImg from "./assets/logo.svg";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LogIn from "./login/index.jsx";
+import Register from "./register/index.jsx";
+import Editor from "./editor/index.jsx";
 
 function App() {
-  function handleClick() {
-    console.log("Clicked");
-  }
-
   return (
-    <div>
-      <Header headerImg={logoImg} headerTitle="Blogr.AI" />
-      <AuthContainer
-        userInputMetaData={LOGIN_META_DATA}
-        handleClick={handleClick}
-        buttonName="Login"
-      />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" exact element={<LogIn />}></Route>
+        <Route path="/register" exact element={<Register />}></Route>
+        <Route path="/editor" element={<Editor />}></Route>
+      </Routes>
+    </Router>
   );
 }
 

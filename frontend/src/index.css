@@ -37,6 +37,21 @@ PADDING, MARGIN: 0.5rem, 1rem
   -moz-osx-font-smoothing: grayscale;
 }
 
+p {
+  font-size: 1rem;
+}
+
+a:visited,
+a:link {
+  text-decoration: none;
+  color: #1971c2;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #242424;
+}
+
 .btn {
   font-family: Montserrat, Inter, system-ui, Avenir, Helvetica, Arial,
     sans-serif;
@@ -67,4 +82,30 @@ header img {
 header h1 {
   margin-left: 1rem;
   font-size: 3rem;
+}
+
+.box {
+  width: 90%;
+  max-width: 30rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 1rem;
+  margin: auto;
+
+  border: 1px solid #eee;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+}
+
+.box-btn {
+  background: linear-gradient(#339af0, #339af0, #1864ab);
+  transition: all 300ms;
+}
+
+.box-btn:hover {
+  transform: scale(1.05);
 }

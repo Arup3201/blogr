@@ -6,7 +6,7 @@ import os
 
 def create_app(config_name=None):
     app = Flask(__name__, instance_relative_config=True)
-
+    
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV') or 'development'
     
@@ -21,7 +21,7 @@ def create_app(config_name=None):
     with app.app_context():
         db.create_all()
     
-    CORS(app)
+    CORS(app, supports_credentials=True)
     
     # Create migration for database in case modification in the database
     Migrate(app, db, compare_type=True)

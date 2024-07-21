@@ -1,10 +1,12 @@
 export const LOGIN_META_DATA = [
   {
-    inputLabel: "User Name",
-    inputPlaceholder: "johnabraham",
+    name: "username",
+    placeholder: "johnabraham",
+    text: "User Name",
   },
   {
-    inputLabel: "Password",
-    inputPlaceholder: "john1234",
+    name: "password",
+    placeholder: "john1234",
+    text: "Password",
   },
 ];

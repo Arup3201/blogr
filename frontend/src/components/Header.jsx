@@ -1,8 +1,8 @@
-export function Header({ headerImg, headerTitle }) {
+export default function Header({ children, ...props }) {
   return (
     <header>
-      <img src={headerImg} alt={headerTitle} />
-      <h1>{headerTitle}</h1>
+      <img {...props} alt={children} />
+      <h1>{children}</h1>
     </header>
   );
 }
