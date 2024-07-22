@@ -16,18 +16,22 @@ def create_app(config_name=None):
         app.config.from_object(ProductionConfig)
 
     # Build the database model
-    from app.models import db
+    from .base_model import db
+    from .user_authentication.models import User
+    from .blog_management.models import Blog, Comment, Question
     db.init_app(app)
     with app.app_context():
         db.create_all()
     
+    # Avoid Cross Origin Request Errors and also allow credentials to be passed (e.g. cookies)
     CORS(app, supports_credentials=True)
     
     # Create migration for database in case modification in the database
     Migrate(app, db, compare_type=True)
     
     # Authentication and Blog blueprints
-    from app.views import auth_bp, login_manager, blog_bp
+    from .user_authentication.views import auth_bp, login_manager
+    from .blog_management.views import blog_bp
     login_manager.init_app(app)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(blog_bp, url_prefix='/blog')

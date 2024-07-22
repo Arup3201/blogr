@@ -1,7 +1,17 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+import { useNavigate } from "react-router-dom";
+import { UserService } from "../service/user_service.js";
+
 export default function Editor() {
+  const navigate = useNavigate();
+
+  // Check user authentication with token
+  if (~UserService.hasToken()) {
+    navigate("/");
+  }
+
   // Toolbar options for the editor
   const modulesRef = {
     toolbar: [

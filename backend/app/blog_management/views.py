@@ -1,68 +1,12 @@
 from flask import Blueprint, request, jsonify, current_app
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import login_required, current_user
 import os
-import json
 from pathlib import Path
-from app.models import db, User, Blog, Comment
+from app.base_model import db
+from app.user_authentication.models import User
+from .models import Blog, Comment, Question
 
-auth_bp = Blueprint('auth', __name__)
 blog_bp = Blueprint('blog', __name__)
-
-login_manager = LoginManager()
-
-@auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method=='POST':
-        data = json.loads(request.data.decode('utf-8'))
-        uname = data.get('username')
-        password = data.get('password')
-        
-        if not uname or not password:
-            return jsonify({'message': 'Need credentials'}), 400
-        
-        user = db.session.execute(db.select(User).where(User.username==uname)).scalar()
-        
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            return jsonify({'message': 'Login Successful'}), 200
-        
-        else:
-            return jsonify({'message': 'Login Failed', 'reason': 'user does not exist or password is wrong.'}), 400
-    
-    return jsonify({'message': f'{request.method} is not handled on this end point. Please try with POST requests.'}), 404
-
-@auth_bp.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method=='POST':
-        data = json.loads(request.data.decode('utf-8'))
-        user = User(username=data['username'], email=data['email'], password=generate_password_hash(data['password']))
-        db.session.add(user)
-        try:
-            db.session.commit()
-            return jsonify({'message': 'Registration Successful'}), 201
-        except:
-            return jsonify({'message': 'Registration Failed.'}), 409
-    
-    return jsonify({'message': f'{request.method} is not handled on this end point. Please try with POST requests.'}), 404
-    
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
-@login_manager.unauthorized_handler
-def unauthorized():
-    return jsonify({'message': 'You need to login first.'}), 404
-
-@auth_bp.route('/logout', methods=['GET', 'POST'])
-@login_required
-def logout():
-    if request.method == 'GET':
-        logout_user()
-        return jsonify({'message': 'logout successful.'}), 200
-    
-    return jsonify({'message': f'{request.method} is not handled on this end point. Please try with GET requests.'}), 404
-
 
 ALLOWED_EXTENSIONS = {'txt', 'md'}
 
@@ -169,6 +113,7 @@ def create_comment():
             return jsonify({'message': 'Failed to save the comment'}), 404
         
 @blog_bp.route('/get_comments', methods=['GET'])
+@login_required
 def get_comments():
     if request.method == 'GET':
         blog_id = request.args.get('blog_id', '')

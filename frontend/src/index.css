@@ -44,7 +44,8 @@ p {
 a:visited,
 a:link {
   text-decoration: none;
-  color: #1971c2;
+  color: #364fc7;
+  font-weight: 500;
 }
 
 a:hover {
@@ -55,9 +56,9 @@ a:hover {
 .btn {
   font-family: Montserrat, Inter, system-ui, Avenir, Helvetica, Arial,
     sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2rem;
-  background-color: #1971c2;
+  background-color: #364fc7;
   color: #fff;
   padding: 0.5rem 1.5rem;
 
@@ -93,7 +94,7 @@ header h1 {
   align-items: center;
 
   padding: 1rem;
-  margin: auto;
+  margin: 3rem auto;
 
   border: 1px solid #eee;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
@@ -102,10 +103,11 @@ header h1 {
 }
 
 .box-btn {
-  background: linear-gradient(#339af0, #339af0, #1864ab);
+  background: linear-gradient(#364fc7, #3b5bdb);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
   transition: all 300ms;
 }
 
 .box-btn:hover {
-  transform: scale(1.05);
+  background: linear-gradient(#4263eb, #4c6ef5);
 }
