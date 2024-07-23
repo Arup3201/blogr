@@ -30,9 +30,8 @@ def create_app(config_name=None):
     Migrate(app, db, compare_type=True)
     
     # Authentication and Blog blueprints
-    from .user_authentication.views import auth_bp, login_manager
-    from .blog_management.views import blog_bp
-    login_manager.init_app(app)
+    from app.user_authentication.views import auth_bp
+    from app.blog_management.views import blog_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(blog_bp, url_prefix='/blog')
     
