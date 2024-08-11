@@ -8,6 +8,6 @@ export default defineConfig({
   },
   plugins: [react()],
   optimizeDeps: {
-    exclude: ["socket.io-client"],
+    exclude: ["socket.io-client", "js-big-decimal"],
   },
 });

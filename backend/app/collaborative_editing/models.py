@@ -1,5 +1,5 @@
 from sqlalchemy import Column, INTEGER, JSON
-from app.base_model import db
+from app.base.model import db
 
 class Draft(db.Model):
     __tablename__ = 'drafts'

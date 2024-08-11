@@ -13,7 +13,7 @@ export function post(url, data) {
   return createReq(url, options);
 }
 
-function createReq(url, options) {
+async function createReq(url, options) {
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -24,7 +24,7 @@ function createReq(url, options) {
   options.mode = "cors";
   options.headers = headers;
 
-  return fetch(baseURL + url, options)
+  return await fetch(baseURL + url, options)
     .then((response) => checkError(response))
     .then((response) => {
       return response;

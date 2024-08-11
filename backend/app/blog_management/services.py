@@ -1,7 +1,7 @@
 from flask import request, jsonify, make_response, current_app
 import json, jwt
 
-from app.base_model import db
+from app.base.model import db
 from app.user_authentication.models import User
 from app.blog_management.models import Blog, Comment, Question
 from app.blog_management.utils import allowed_file

@@ -2,7 +2,7 @@ from flask import jsonify, make_response, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 
-from app.base_model import db
+from app.base.model import db
 from app.user_authentication.models import User
 
 class UserService():

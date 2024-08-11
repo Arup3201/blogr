@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.jsx";
-import Input from "../components/Input/Input.jsx";
-import Button from "../components/Button.jsx";
+import { Input, Button, Form } from "../widgets";
 import logoImg from "../assets/logo.svg";
-import { UserService } from "../service/user_service.js";
+import { UserService } from "../services/user_service.js";
 
 export default function LogIn() {
   const [username, setUserName] = useState();
@@ -37,39 +36,35 @@ export default function LogIn() {
   }
 
   return (
-    <>
-      <form className="box" onSubmit={handleLogin}>
-        <Header src={logoImg}>{"Blogr.AI"}</Header>
+    <Form className="formBox">
+      <Header src={logoImg}>{"Blogr.AI"}</Header>
+      <Input
+        required
+        id="username"
+        label="User name"
+        onChange={(e) => {
+          setUserName(e.target.value);
+        }}
+      />
+      <Input
+        required
+        id="password"
+        label="Password"
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
+      />
 
-        <Input
-          placeholder=""
-          name="username"
-          onChange={(e) => {
-            setUserName(e.target.value);
-          }}
-        >
-          {"User Name"}
-        </Input>
-        <Input
-          placeholder=""
-          name="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        >
-          {"Password"}
-        </Input>
-        <Button className={"box-btn"}>
-          {!loading ? "Login" : "Trying to login..."}
-        </Button>
-        <p>
-          If you are not a member,{" "}
-          <a href="#" onClick={handleRegisterClick}>
-            register here
-          </a>
-          .
-        </p>
-      </form>
-    </>
+      <Button variant="contained" onClick={handleLogin}>
+        Log in
+      </Button>
+      <p>
+        If you are already a member,
+        <a href="#" onClick={handleRegisterClick}>
+          register here
+        </a>
+        .
+      </p>
+    </Form>
   );
 }

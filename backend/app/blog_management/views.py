@@ -1,11 +1,8 @@
 from flask import Blueprint, request
-from flask_login import login_required
 from app.blog_management.services import BlogService
 
 blog_bp = Blueprint('blog', __name__)
 
-@blog_bp.route('/create_blog', methods=['POST'])
-@login_required
 def create_blog():
     # Form data
     title = request.form['title']
@@ -19,8 +16,6 @@ def create_blog():
     return res
 
 
-@blog_bp.route('/view_blog', methods=['GET'])
-@login_required
 def view_blog():
     blog_id = request.args.get('id', '')
     blog_id = int(blog_id)
@@ -29,8 +24,6 @@ def view_blog():
     res = service.get_blog(blog_id)
     return res
 
-@blog_bp.route('/create_comment', methods=['POST'])
-@login_required
 def create_comment():
     if request.method == 'POST':
         blog_id = request.args.get('blog_id', '')
@@ -43,8 +36,6 @@ def create_comment():
         res = service.make_comment(blog_id)
         return res
         
-@blog_bp.route('/get_comments', methods=['GET'])
-@login_required
 def get_comments():
     blog_id = request.args.get('blog_id', '')
     blog_id = int(blog_id)
@@ -52,3 +43,8 @@ def get_comments():
     service = BlogService()
     res = service.get_comments(blog_id)
     return res
+
+blog_bp.add_url_rule(rule='/create_blog', methods=['POST'], view_func=create_blog, endpoint='create-blog')
+blog_bp.add_url_rule(rule='/view_blog', methods=['GET'], view_func=view_blog, endpoint='view-blog')
+blog_bp.add_url_rule(rule='/create_comment', methods=['POST'], view_func=create_comment, endpoint='create-comment')
+blog_bp.add_url_rule(rule='/get_comments', methods=['GET'], view_func=get_comments, endpoint='get-comments')

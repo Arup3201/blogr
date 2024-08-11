@@ -85,13 +85,12 @@ header h1 {
   font-size: 3rem;
 }
 
-.box {
-  width: 90%;
+.formBox {
   max-width: 30rem;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-auto-flow: row;
+  justify-content: center;
 
   padding: 1rem;
   margin: 3rem auto;
@@ -102,12 +101,6 @@ header h1 {
   border-radius: 8px;
 }
 
-.box-btn {
-  background: linear-gradient(#364fc7, #3b5bdb);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
-  transition: all 300ms;
-}
-
-.box-btn:hover {
-  background: linear-gradient(#4263eb, #4c6ef5);
+.formBox > * {
+  justify-self: center;
 }
