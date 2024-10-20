@@ -4,25 +4,27 @@ import Header from "../components/Header.jsx";
 import { Input, Button, Form } from "../widgets";
 import logoImg from "../assets/logo.svg";
 import { UserService } from "../services/user_service.js";
+import { useContext } from "react";
+import { AuthContext } from "../store/authentication-context.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function LogIn() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const { setIsLoading } = useContext(AuthContext);
 
   function handleLogin(event) {
     event.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     UserService.loginUser({ username: username, password: password })
       .then((response) => {
         console.log(response.message);
         onLoginSuccess();
-        setLoading(false);
       })
       .catch((err) => {
         console.error(err.message);
-        setLoading(false);
       });
   }
 
@@ -32,7 +34,8 @@ export default function LogIn() {
   }
 
   function onLoginSuccess() {
-    navigate("/editor");
+    navigate("/main-page");
+    setIsLoading(false);
   }
 
   return (

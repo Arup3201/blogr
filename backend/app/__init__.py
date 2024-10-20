@@ -33,10 +33,7 @@ def create_app(config_name=None):
     # Authentication and Blog blueprints
     from app.user_authentication.views import auth_bp
     from app.blog_management.views import blog_bp
-    from app.collaborative_editing.editor import collaborator
     application.register_blueprint(auth_bp, url_prefix='/auth')
     application.register_blueprint(blog_bp, url_prefix='/blog')
-    
-    collaborator.init_app(application, cors_allowed_origins="*")
     
     return application
