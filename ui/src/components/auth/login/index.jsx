@@ -4,6 +4,7 @@ import { Field } from "../../widgets/field";
 import { Form } from "../../widgets/form";
 import { Button } from "../../widgets/button";
 import { Input } from "../../widgets/input";
+import { Auth } from "../../../services/auth.service";
 
 function Login() {
   function handleLogin(event) {
@@ -12,6 +13,9 @@ function Login() {
     const fd = new FormData(event.target);
 
     const data = Object.fromEntries(fd.entries());
+    Auth.login(data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   }
 
   return (
