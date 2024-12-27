@@ -1,4 +1,4 @@
-class Auth:
+class Authentication:
     def __init__(self):
         pass
     
