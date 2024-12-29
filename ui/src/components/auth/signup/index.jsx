@@ -5,13 +5,14 @@ import { Form } from "../../widgets/form";
 import { Button } from "../../widgets/button";
 import { Input, Password } from "../../widgets/input";
 import { Auth } from "../../../services/auth.service";
+import { GoogleLogin } from "@react-oauth/google";
 
 /*
 Best UX Practices for LogIn and Signup: https://medium.com/@fiona.chiaraviglio/best-practices-for-login-sign-up-from-a-ux-perspective-e5d14b6ffce0
 */
 
 function Signup() {
-  function handleLogin(event) {
+  function handleSignup(event) {
     event.preventDefault();
 
     const fd = new FormData(event.target);
@@ -22,13 +23,19 @@ function Signup() {
       .catch((err) => console.log(err));
   }
 
+  function onGoogleLogin(response) {
+    Auth.googleLogin({
+      credential: response.credential,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err.message));
+  }
+
   return (
     <Card>
       <img src={Logo} className="mx-auto w-12" />
-      <p className="text-lg font-bold text-gray-900">
-        Welcome Back To Blogr, Resume Your Journey With Us
-      </p>
-      <Form onSubmit={handleLogin}>
+      <p className="text-lg font-bold text-gray-900">Create Account in Blogr</p>
+      <Form onSubmit={handleSignup}>
         <Field label="Email" htmlFor="email">
           <Input
             id="email"
@@ -74,8 +81,21 @@ function Signup() {
             ]}
           />
         </Field>
-        <Button type="submit">Login</Button>
+        <Button type="submit">Signup</Button>
       </Form>
+      <fieldset className="flex w-full flex-col items-center border-t-2">
+        <legend className="text-md mb-2 text-gray-800">or you can also</legend>
+        <GoogleLogin onSuccess={onGoogleLogin} />
+      </fieldset>
+      <div className="mt-2 text-sm font-medium text-gray-800">
+        Already a Part of Blogr?{" "}
+        <a
+          href="/login"
+          className="border-b-2 border-b-transparent text-indigo-500 hover:border-indigo-500"
+        >
+          Resume Your Reading Journey
+        </a>
+      </div>
     </Card>
   );
 }
