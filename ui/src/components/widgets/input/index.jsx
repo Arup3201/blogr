@@ -12,6 +12,7 @@ const Input = ({ rules, ...props }) => {
 
 const Password = ({
   rules = [],
+  showForgorPassword = false,
   onChange = () => {},
   forgotPassword = () => {},
   ...props
@@ -80,12 +81,14 @@ const Password = ({
             </li>
           ))}
         </ul>
-        <button
-          className="text-md border-b-2 border-b-transparent font-semibold text-indigo-500 transition-all hover:border-b-2 hover:border-b-indigo-500"
-          onClick={forgotPassword}
-        >
-          Forgot Password?
-        </button>
+        {showForgorPassword && (
+          <button
+            className="text-md border-b-2 border-b-transparent font-semibold text-indigo-500 transition-all hover:border-b-2 hover:border-b-indigo-500"
+            onClick={forgotPassword}
+          >
+            Forgot Password?
+          </button>
+        )}
       </div>
     </div>
   );

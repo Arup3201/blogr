@@ -7,6 +7,12 @@ const Auth = {
   googleLogin: (data = {}) => {
     return post("api/auth/google-login", data);
   },
+  signup: (data = {}) => {
+    return post("api/auth/signup", data);
+  },
+  googleSignup: (data = {}) => {
+    return post("api/auth/google-signup", data);
+  },
 };
 
 export { Auth };

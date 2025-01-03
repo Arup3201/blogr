@@ -18,13 +18,13 @@ function Signup() {
     const fd = new FormData(event.target);
 
     const data = Object.fromEntries(fd.entries());
-    Auth.login(data)
+    Auth.signup(data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   }
 
-  function onGoogleLogin(response) {
-    Auth.googleLogin({
+  function onGoogleSignup(response) {
+    Auth.googleSignup({
       credential: response.credential,
     })
       .then((res) => console.log(res))
@@ -85,7 +85,7 @@ function Signup() {
       </Form>
       <fieldset className="flex w-full flex-col items-center border-t-2">
         <legend className="text-md mb-2 text-gray-800">or you can also</legend>
-        <GoogleLogin onSuccess={onGoogleLogin} />
+        <GoogleLogin onSuccess={onGoogleSignup} />
       </fieldset>
       <div className="mt-2 text-sm font-medium text-gray-800">
         Already a Part of Blogr?{" "}
