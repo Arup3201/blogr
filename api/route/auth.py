@@ -1,4 +1,4 @@
-import json, traceback
+import json, traceback, datetime
 from flask import Blueprint, request, make_response, jsonify
 
 from api.service.auth import BlogrAuthenticator, GoogleAuthenticator
@@ -36,8 +36,10 @@ def login():
     
     authenticator = BlogrAuthenticator()
     try:
-        data = authenticator.login(email, password)
-        return make_response(jsonify({"data": data}))
+        user, token = authenticator.login(email, password)
+        response = make_response(jsonify({"user": user}), 200)
+        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite=True, domain=request.base_url)
+        return response
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)

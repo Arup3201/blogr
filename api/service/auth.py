@@ -1,10 +1,10 @@
-from datetime import datetime, timezone
-from google.auth import jwt
+from datetime import datetime, timezone, timedelta
+from google.auth import jwt as google_jwt
 
 from api.session import RelationalSession
 from api.session.models import User
-from api.utils import generate_primary_key
-from api import env_config
+from api.utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
+from api.error import UserNotFoundError, PasswordMismatchError
 
 class Authenticator:
     def __init__(self):
@@ -19,21 +19,33 @@ class Authenticator:
 class BlogrAuthenticator(Authenticator):
     
     def signup(self, email, password):
+        hashed_pass, salt = encrypt_password(password)
+        
         user = User(**{
             "id": generate_primary_key("USR"), 
             "email": email, 
-            "password": password, 
+            "hash_password": hashed_pass, 
+            "password_salt": salt, 
             "created_at": datetime.now(timezone.utc)
         })
         self.session.add(user)
         return user.to_dict()
     
     def login(self, email, password):
-        pass
+        user = self.session.get(User, email=email)
+        if not user:
+            raise UserNotFoundError(email)
+        
+        if decrypt_password(user.hash_password, user.password_salt) != password:
+            raise PasswordMismatchError()
+        
+        token = get_jwt_token(user.id, user.email, datetime.now()+timedelta(minutes=20))
+        
+        return user, token
     
 class GoogleAuthenticator(Authenticator):
     def signup(self, credential):
-        decoded_credential = jwt.decode(credential, verify=False)
+        decoded_credential = google_jwt.decode(credential, verify=False)
         print(decoded_credential)
     
     def login(self, credential):
