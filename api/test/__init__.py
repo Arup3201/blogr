@@ -7,5 +7,11 @@ import os, sys
 api_dir = os.path.abspath(os.path.join(__file__, os.path.pardir, os.path.pardir))
 sys.path.append(api_dir)
 
+from api.session import RelationalSession
+
 class TestBase(unittest.TestCase):
-    pass
+    def setUp(self):
+        self.session = RelationalSession()
+        
+    def tearDown(self):
+        self.sessin.session.close()
