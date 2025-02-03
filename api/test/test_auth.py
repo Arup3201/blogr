@@ -1,9 +1,18 @@
 from api.test import TestBase
+from api.service.auth import BlogrAuthenticator
 
 class TestAuth(TestBase):
     
     def test_blogr_signup(self):
-        pass
+        email = "arup@gmail.com"
+        password = "123456"
+        authenticator = BlogrAuthenticator()
+        
+        authenticator.signup(email, password)
+        self.session.commit()
+        
+        user = self.session.get(email=email)
+        self.assertNotEqual(user, None)
     
     def test_blogr_login(self):
         pass
