@@ -29,6 +29,7 @@ class BlogrAuthenticator(Authenticator):
             "created_at": datetime.now(timezone.utc)
         })
         self.session.add(user)
+        self.session.commit()
         return user.to_dict()
     
     def login(self, email, password):

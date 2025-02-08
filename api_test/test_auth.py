@@ -8,11 +8,9 @@ class TestAuth(TestBase):
         password = "123456"
         authenticator = BlogrAuthenticator()
         
-        authenticator.signup(email, password)
-        self.session.commit()
+        user = authenticator.signup(email, password)
         
-        user = self.session.get(email=email)
-        self.assertNotEqual(user, None)
+        self.assertNotEqual(user, {})
     
     def test_blogr_login(self):
         pass

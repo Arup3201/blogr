@@ -7,7 +7,7 @@ Base = declarative_base()
 class Mixin:
     def to_dict(self):
         return {
-            c.name: getattr(c, c.name) for c in self.__table__.columns
+            c.name: getattr(self, c.name) for c in self.__table__.columns
         }
 
 class User(Base, Mixin):
