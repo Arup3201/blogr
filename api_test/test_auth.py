@@ -1,4 +1,4 @@
-from api.test import TestBase
+from . import TestBase
 from api.service.auth import BlogrAuthenticator
 
 class TestAuth(TestBase):
