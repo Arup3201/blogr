@@ -3,6 +3,7 @@ from datetime import datetime
 from cryptography.fernet import Fernet
 
 from api import env_config
+from api.constants import ENCODING_STANDARD
 from api.error import JWTTokenError
 
 def generate_primary_key(prefix: str="", len: int=6, chars: str=string.ascii_lowercase+string.ascii_uppercase+string.digits) -> str:
@@ -11,13 +12,13 @@ def generate_primary_key(prefix: str="", len: int=6, chars: str=string.ascii_low
 def encrypt_password(password: str) -> tuple[str, str]:
     salt = Fernet.generate_key()
     f = Fernet(salt)
-    encrypted_password = f.encrypt(password.encode())
-    return encrypted_password.decode(), salt
+    encrypted_password = f.encrypt(password.encode(ENCODING_STANDARD))
+    return encrypted_password.decode(ENCODING_STANDARD), salt.decode(ENCODING_STANDARD)
 
 def decrypt_password(en_password: str, salt: str) -> str:
-    f = Fernet(salt)
-    decrypted_password = f.decrypt(en_password.encode())
-    return decrypted_password.decode()
+    f = Fernet(salt.encode(ENCODING_STANDARD))
+    decrypted_password = f.decrypt(en_password.encode(ENCODING_STANDARD))
+    return decrypted_password.decode(ENCODING_STANDARD)
 
 def get_jwt_token(client_id: str, email: str, expiry_time: datetime) -> str:
     token = jwt.encode({"iss": client_id, 

@@ -13,7 +13,16 @@ class TestAuth(TestBase):
         self.assertNotEqual(user, {})
     
     def test_blogr_login(self):
-        pass
+        email = "arup@gmail.com"
+        password = "123456"
+        authenticator = BlogrAuthenticator()
+        
+        user, token = authenticator.login(email, password)
+        
+        print(token)
+        
+        self.assertNotEqual(user, {})
+        self.assertNotEqual(token, None)
     
     def test_google_signup(self):
         pass
