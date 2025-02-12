@@ -1,3 +1,9 @@
+'''
+auth.py - routes defined for authenticating users
+
+currently supported authentication methods - general blogr and google
+'''
+
 import json, traceback, datetime
 from flask import Blueprint, request, make_response, jsonify
 
