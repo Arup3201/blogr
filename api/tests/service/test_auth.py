@@ -1,5 +1,5 @@
-from api.tests.service import TestBase
-from api.service.auth import BlogrAuthenticator
+from tests.service import TestBase
+from service.auth import BlogrAuthenticator
 
 class TestAuth(TestBase):
     

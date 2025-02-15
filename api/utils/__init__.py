@@ -2,9 +2,9 @@ import random, string, jwt
 from datetime import datetime
 from cryptography.fernet import Fernet
 
-from api import env_config
-from api.constants import ENCODING_STANDARD
-from api.error import JWTTokenError
+import env_config
+from constants import ENCODING_STANDARD
+from error import JWTTokenError
 
 def generate_primary_key(prefix: str="", len: int=6, chars: str=string.ascii_lowercase+string.ascii_uppercase+string.digits) -> str:
     return prefix + ''.join([random.SystemRandom().choice(chars) for _ in range(len)])

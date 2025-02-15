@@ -7,7 +7,7 @@ currently supported authentication methods - general blogr and google
 import json, traceback, datetime
 from flask import Blueprint, request, make_response, jsonify
 
-from api.service.auth import BlogrAuthenticator, GoogleAuthenticator
+from service.auth import BlogrAuthenticator, GoogleAuthenticator
 
 auth_app = Blueprint('auth', __name__)
 

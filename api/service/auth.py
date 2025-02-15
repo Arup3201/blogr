@@ -1,10 +1,10 @@
 from datetime import datetime, timezone, timedelta
 from google.auth import jwt as google_jwt
 
-from api.session import RelationalSession
-from api.session.models import User
-from api.utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
-from api.error import UserNotFoundError, EmailNotFoundError, PasswordMismatchError
+from session import RelationalSession
+from session.models import User
+from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
+from error import UserNotFoundError, EmailNotFoundError, PasswordMismatchError
 
 class Authenticator:
     def __init__(self):

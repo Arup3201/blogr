@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import Session
 
-from api import env_config
+import env_config
 
 class RelationalSession:
     def __init__(self):

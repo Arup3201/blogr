@@ -1,8 +1,8 @@
 import unittest
 
 # load env
-from api.env_load import load_env
-load_env("api/.env")
+from env_load import load_env
+load_env("../../.env")
 
 from api.session import RelationalSession
 
