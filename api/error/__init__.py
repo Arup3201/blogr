@@ -1,4 +1,8 @@
 class UserNotFoundError(Exception):
+    def __init__(self, id):
+        super().__init__(f"User with id {id} not found!")
+
+class EmailNotFoundError(Exception):
     def __init__(self, email):
         super().__init__(f"Email {email} not found!")
         
