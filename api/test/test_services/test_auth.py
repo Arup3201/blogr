@@ -10,13 +10,15 @@ class TestAuth(TestBase):
         
         user = authenticator.signup(email, password)
         
-        # assert no UserNotFoundError
-        
         self.assertNotEqual(user, {}, "blogr signup did not create the user")
     
     def test_blogr_signup_duplicate_email(self):
-        # assert fail to create account with existing email
-        pass
+        email = "arup@gmail.com"
+        password = "123456"
+        authenticator = BlogrAuthenticator()
+        
+        user = authenticator.signup(email, password)
+        
     
     def test_blogr_login_correct(self):
         email = "arup@gmail.com"
@@ -25,9 +27,9 @@ class TestAuth(TestBase):
         
         user, token = authenticator.login(email, password)
         
-        # assert no EmailNotFound error
-        
         # assert token is not None
+        self.assertNotEqual(user, {})
+        self.assertNotEqual(token, None)
     
     def test_blogr_login_incorrect_email(self):
         pass

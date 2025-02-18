@@ -4,7 +4,7 @@ from google.auth import jwt as google_jwt
 from session import RelationalSession
 from session.models import User
 from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
-from error import UserNotFoundError, EmailNotFoundError, PasswordMismatchError
+from error import UserNotFound, EmailNotFound, PasswordMismatch, EmailAlreadyExist
 
 class Authenticator:
     def __init__(self):
@@ -20,10 +20,6 @@ class BlogrAuthenticator(Authenticator):
     
     def get_user(self, id):
         user = self.session.get(User, id=id)
-        
-        if not user:
-            raise UserNotFoundError(id=id)
-        
         return user
     
     def signup(self, email, password):
@@ -36,20 +32,27 @@ class BlogrAuthenticator(Authenticator):
             "password_salt": salt, 
             "created_at": datetime.now(timezone.utc)
         })
+        
+        if self.session.get(User, email=email):
+            raise EmailAlreadyExist(email)
+        
         self.session.add(user)
         self.session.commit()
         
         created_user = self.get_user(user.id)
+        
+        if not created_user:
+            raise UserNotFound(id=user.id)
         
         return created_user.to_dict()
     
     def login(self, email, password):
         user = self.session.get(User, email=email)
         if not user:
-            raise EmailNotFoundError(email=email)
+            raise EmailNotFound(email=email)
         
         if decrypt_password(user.hash_password, user.password_salt) != password:
-            raise PasswordMismatchError()
+            raise PasswordMismatch()
         
         token = get_jwt_token(user.id, user.email, datetime.now()+timedelta(minutes=20))
         
