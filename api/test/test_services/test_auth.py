@@ -1,9 +1,9 @@
 from test_services import TestBase
 from service.auth import BlogrAuthenticator
 
-class TestAuth(TestBase):
+class TestBlogrSignup(TestBase):
     
-    def test_blogr_signup_success(self):
+    def test_correct_signup(self):
         email = "arup@gmail.com"
         password = "123456"
         authenticator = BlogrAuthenticator()
@@ -12,15 +12,15 @@ class TestAuth(TestBase):
         
         self.assertNotEqual(user, {}, "blogr signup did not create the user")
     
-    def test_blogr_signup_duplicate_email(self):
+    def test_duplicate_email(self):
         email = "arup@gmail.com"
         password = "123456"
         authenticator = BlogrAuthenticator()
         
         user = authenticator.signup(email, password)
-        
     
-    def test_blogr_login_correct(self):
+class TestBlogrLogin(TestBase):
+    def test_correct_login(self):
         email = "arup@gmail.com"
         password = "123456"
         authenticator = BlogrAuthenticator()
@@ -31,14 +31,31 @@ class TestAuth(TestBase):
         self.assertNotEqual(user, {})
         self.assertNotEqual(token, None)
     
-    def test_blogr_login_incorrect_email(self):
+    def test_incorrect_email(self):
         pass
     
-    def test_blogr_login_incorrect_password(self):
+    def test_incorrect_password(self):
         pass
     
-    def test_google_signup(self):
+    def test_token_expiry(self):
+        pass
+
+class TestGoogleSignup(TestBase):
+    
+    def test_correct_signup(self):
         pass
     
-    def test_google_login(self):
+    def test_duplicate_email(self):
+        pass
+
+
+class TestGoogleLogin(TestBase):
+    
+    def test_correct_login(self):
+        pass
+    
+    def test_incorrect_credentials(self):
+        pass
+    
+    def test_token_expiry(self):
         pass
