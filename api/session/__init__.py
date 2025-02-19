@@ -15,8 +15,11 @@ class RelationalSession:
             
         return self.session.query(model).where(conditions).first()
     
-    def add(self, user):
-        self.session.add(user)
+    def add(self, instance):
+        self.session.add(instance)
+        
+    def delete(self, instance):
+        self.session.delete(instance)
         
     def commit(self):
         self.session.commit()

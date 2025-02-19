@@ -38,13 +38,6 @@ class BlogrAuthenticator(Authenticator):
         
         self.session.add(user)
         self.session.commit()
-        
-        created_user = self.get_user(user.id)
-        
-        if not created_user:
-            raise UserNotFound(id=user.id)
-        
-        return created_user.to_dict()
     
     def login(self, email, password):
         user = self.session.get(User, email=email)

@@ -1,17 +1,23 @@
 from test_services import TestBase
 from service.auth import BlogrAuthenticator
+from session.models import User
 from error import EmailAlreadyExist, EmailNotFound, PasswordMismatch
 
 class TestBlogrSignup(TestBase):
     
     def test_correct_signup(self):
+        # deletes previous accounts with this email
         email = "arup@gmail.com"
         password = "123456"
+        user = self.session.get(User, email=email)
+        self.session.delete(user)
+        self.session.commit()
         authenticator = BlogrAuthenticator()
         
-        user = authenticator.signup(email, password)
+        authenticator.signup(email, password)
         
-        self.assertNotEqual(user, {}, "blogr signup did not create the user")
+        user = self.session.get(User, email=email)
+        self.assertNotEqual(user, None, "blogr signup did not create the user")
     
     def test_duplicate_email(self):
         email = "arup@gmail.com"
@@ -22,6 +28,7 @@ class TestBlogrSignup(TestBase):
             authenticator.signup(email, password)
     
 class TestBlogrLogin(TestBase):
+    
     def test_correct_login(self):
         email = "arup@gmail.com"
         password = "123456"
@@ -38,7 +45,7 @@ class TestBlogrLogin(TestBase):
         password = "123456"
         authenticator = BlogrAuthenticator()
         
-        with self.assertRaises(EmailNotFound, "Did not raise email not found error!"):
+        with self.assertRaises(EmailNotFound, msg="Did not raise email not found error!"):
             authenticator.login(email, password)
     
     def test_incorrect_password(self):
