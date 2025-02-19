@@ -1,7 +1,11 @@
+from asyncio import sleep
+from unittest import IsolatedAsyncioTestCase
+
 from test_services import TestBase
 from service.auth import BlogrAuthenticator
 from session.models import User
-from error import EmailAlreadyExist, EmailNotFound, PasswordMismatch
+from utils import validate_jwt_token
+from error import EmailAlreadyExist, EmailNotFound, PasswordMismatch, JWTTokenError
 
 class TestBlogrSignup(TestBase):
     
@@ -56,8 +60,27 @@ class TestBlogrLogin(TestBase):
         with self.assertRaises(PasswordMismatch, msg="Did not raise password mismatch error!"):
             authenticator.login(email, password)
     
-    def test_token_expiry(self):
-        pass
+    def test_token_not_expired(self):
+        email = "arup@gmail.com"
+        password = "123456"
+        authenticator = BlogrAuthenticator()
+        
+        _, token = authenticator.login(email, password)
+        payload = validate_jwt_token(token)
+        
+        self.assertNotEqual(payload, {}, msg="Decoded token is empty!")
+        
+class TestExpiredLogin(IsolatedAsyncioTestCase):
+    async def test_token_expired(self):
+        email = "arup@gmail.com"
+        password = "123456"
+        authenticator = BlogrAuthenticator()
+        
+        _, token = authenticator.login(email, password, expiry_unit="seconds", token_expires=2)
+        await sleep(4)
+
+        with self.assertRaises(JWTTokenError, msg="Token did not expire in time!"):
+            validate_jwt_token(token)
 
 class TestGoogleSignup(TestBase):
     

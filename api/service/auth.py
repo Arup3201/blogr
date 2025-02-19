@@ -38,8 +38,12 @@ class BlogrAuthenticator(Authenticator):
         
         self.session.add(user)
         self.session.commit()
-    
-    def login(self, email, password):
+
+    def login(self, email:str, password:str, token_expires:int =20, expiry_unit:str ="minutes") -> tuple[dict, str]:
+        '''Login service using blogr API
+        
+        `expiry_unit`: type str. e.g. days, seconds, microseconds, milliseconds, minutes, hours, weeks
+        '''
         user = self.session.get(User, email=email)
         if not user:
             raise EmailNotFound(email=email)
@@ -47,9 +51,9 @@ class BlogrAuthenticator(Authenticator):
         if decrypt_password(user.hash_password, user.password_salt) != password:
             raise PasswordMismatch()
         
-        token = get_jwt_token(user.id, user.email, datetime.now()+timedelta(minutes=20))
+        token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{expiry_unit: token_expires}))
         
-        return user, token
+        return user.to_dict(), token
     
 class GoogleAuthenticator(Authenticator):
     def signup(self, credential):

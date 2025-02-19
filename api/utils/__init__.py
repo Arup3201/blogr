@@ -23,7 +23,6 @@ def decrypt_password(en_password: str, salt: str) -> str:
 def get_jwt_token(client_id: str, email: str, expiry_time: datetime) -> str:
     token = jwt.encode({"iss": client_id, 
                         "sub": email, 
-                        "aud": "BlogR", 
                         "exp": expiry_time}, 
                        env_config.SECRET_KEY, 
                        algorithm="HS256")
