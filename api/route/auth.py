@@ -33,7 +33,7 @@ def login():
     try:
         user, token = authenticator.login(email, password)
         response = make_response(jsonify({"user": user}), 200)
-        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite=True, domain=request.base_url)
+        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite="Lax",domain=request.base_url)
         return response
     except Exception as e:
         traceback.print_exc()
@@ -45,9 +45,11 @@ def google_authorize():
     
     authenticator = GoogleAuthenticator()
     try:
+        print(request.url_root)
         user, token = authenticator.authorize(credential)
         response = make_response(jsonify({"user": user}), 200)
-        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite=True, domain=request.base_url)
+        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite="None", domain=request.url_root)
+        return response
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)
