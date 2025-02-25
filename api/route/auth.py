@@ -24,17 +24,6 @@ def signup():
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)
 
-def google_signup():
-    payload = json.loads(request.data.decode('UTF-8'))
-    credential = payload.pop("credential")
-    authenticator = GoogleAuthenticator()
-    try:
-        data = authenticator.signup(credential)
-        return make_response(jsonify({"data": data}))
-    except Exception as e:
-        traceback.print_exc()
-        return make_response(jsonify({"message": str(e)}), 400)
-        
 def login():
     payload = json.loads(request.data.decode('UTF-8'))
     email = payload.pop("email")
@@ -50,19 +39,19 @@ def login():
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)
 
-def google_login():
+def google_authorize():
     payload = json.loads(request.data.decode('UTF-8'))
     credential = payload.pop("credential")
     
     authenticator = GoogleAuthenticator()
     try:
-        data = authenticator.login(credential)
-        return make_response(jsonify({"data": data}))
+        user, token = authenticator.authorize(credential)
+        response = make_response(jsonify({"user": user}), 200)
+        response.set_cookie(token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite=True, domain=request.base_url)
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)
 
 auth_app.add_url_rule('/signup', view_func=signup, methods=['POST'])
-auth_app.add_url_rule('/google-signup', view_func=google_signup, methods=['POST'])
 auth_app.add_url_rule('/login', view_func=login, methods=['POST'])
-auth_app.add_url_rule('/google-login', view_func=google_login, methods=['POST'])
+auth_app.add_url_rule('/google/authorize', view_func=google_authorize, methods=['POST'])

@@ -2,7 +2,7 @@ from asyncio import sleep
 from unittest import IsolatedAsyncioTestCase
 
 from test_services import TestBase
-from service.auth import BlogrAuthenticator
+from service.auth import BlogrAuthenticator, GoogleAuthenticator
 from session.models import User
 from utils import validate_jwt_token
 from error import EmailAlreadyExist, EmailNotFound, PasswordMismatch, JWTTokenError
@@ -82,22 +82,3 @@ class TestExpiredLogin(IsolatedAsyncioTestCase):
         with self.assertRaises(JWTTokenError, msg="Token did not expire in time!"):
             validate_jwt_token(token)
 
-class TestGoogleSignup(TestBase):
-    
-    def test_correct_signup(self):
-        pass
-    
-    def test_duplicate_email(self):
-        pass
-
-
-class TestGoogleLogin(TestBase):
-    
-    def test_correct_login(self):
-        pass
-    
-    def test_incorrect_credentials(self):
-        pass
-    
-    def test_token_expiry(self):
-        pass

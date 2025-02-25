@@ -1,6 +1,8 @@
 from datetime import datetime, timezone, timedelta
-from google.auth import jwt as google_jwt
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
+import env_config
 from session import RelationalSession
 from session.models import User
 from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
@@ -56,9 +58,23 @@ class BlogrAuthenticator(Authenticator):
         return user.to_dict(), token
     
 class GoogleAuthenticator(Authenticator):
-    def signup(self, credential):
-        decoded_credential = google_jwt.decode(credential, verify=False)
-        print(decoded_credential)
+    def authorize(self, credential:str, token_expires:int = 20, expiry_unit:str = "minutes"):
+        user_info = id_token.verify_oauth2_token(credential, requests.Request(), env_config.GOOGLE_CLIENT_ID)
+        
+        email = user_info['email']
+        
+        user = self.session.get(User, email=email)
+        if not user:
+            user = User(**{
+                "id": generate_primary_key("USR"), 
+                "email": email, 
+                "created_at": datetime.now(timezone.utc), 
+                "external_type": "google"
+            })
+            self.session.add(user)
+            self.session.commit()
+            
+        token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{expiry_unit: token_expires}))
+        
+        return user.to_dict(), token
     
-    def login(self, credential):
-        pass
