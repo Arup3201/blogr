@@ -65,4 +65,4 @@ def google_login():
 auth_app.add_url_rule('/signup', view_func=signup, methods=['POST'])
 auth_app.add_url_rule('/google-signup', view_func=google_signup, methods=['POST'])
 auth_app.add_url_rule('/login', view_func=login, methods=['POST'])
-auth_app.add_url_rule('/login-google', view_func=google_login, methods=['POST'])
+auth_app.add_url_rule('/google-login', view_func=google_login, methods=['POST'])
