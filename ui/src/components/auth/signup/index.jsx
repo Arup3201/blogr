@@ -24,7 +24,7 @@ function Signup() {
   }
 
   function onGoogleSignup(response) {
-    Auth.googleSignup({
+    Auth.googleAuthorize({
       credential: response.credential,
     })
       .then((res) => console.log(res))

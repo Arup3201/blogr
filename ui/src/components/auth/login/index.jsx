@@ -31,7 +31,7 @@ function Login() {
   }
 
   function onGoogleLogin(response) {
-    Auth.googleLogin({
+    Auth.googleAuthorize({
       credential: response.credential,
     })
       .then((res) => console.log(res))
