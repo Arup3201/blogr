@@ -83,14 +83,14 @@ function Signup() {
         </Field>
         <Button type="submit">Signup</Button>
       </Form>
-      <fieldset className="flex w-full flex-col items-center border-t-2">
+      {/* <fieldset className="flex w-full flex-col items-center border-t-2">
         <legend className="text-md mb-2 text-gray-800">or you can also</legend>
         <GoogleLogin onSuccess={onGoogleSignup} />
-      </fieldset>
+      </fieldset> */}
       <div className="mt-2 text-sm font-medium text-gray-800">
         Already a Part of Blogr?{" "}
         <a
-          href="/login"
+          href="/"
           className="border-b-2 border-b-transparent text-indigo-500 hover:border-indigo-500"
         >
           Resume Your Reading Journey

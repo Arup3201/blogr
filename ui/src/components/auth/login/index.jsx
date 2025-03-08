@@ -67,10 +67,10 @@ function Login() {
         </Field>
         <Button type="submit">Login</Button>
       </Form>
-      <fieldset className="flex w-full flex-col items-center border-t-2">
+      {/* <fieldset className="flex w-full flex-col items-center border-t-2">
         <legend className="text-md mb-2 text-gray-800">or you can also</legend>
         <GoogleLogin onSuccess={onGoogleLogin} />
-      </fieldset>
+      </fieldset> */}
       <div className="mt-2 text-sm font-medium text-gray-800">
         Not Already A Part Of Blogr?{" "}
         <a

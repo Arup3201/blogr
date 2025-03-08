@@ -16,4 +16,4 @@ CORS(app)
 app.register_blueprint(auth_app, url_prefix='/api/auth')
 
 if __name__=="__main__":
-    app.run(port=81, debug=True)
+    app.run(port=8081, debug=True)
