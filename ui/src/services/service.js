@@ -3,7 +3,7 @@ const post = async (url, data) => {
 };
 
 const fetchService = async (url, method, body) => {
-  const prefixUrl = "http://127.0.0.1:81/";
+  const prefixUrl = "http://localhost/";
   const fullUrl = prefixUrl + url;
   console.log(fullUrl);
   const response = await fetch(fullUrl, {

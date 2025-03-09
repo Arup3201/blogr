@@ -51,21 +51,23 @@ function Login() {
         <CardDescription>Resume your collaborative blogging</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form id="login" onSubmit={handleLogin}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="john@example.com" />
+              <Input id="email" name="email" placeholder="john@example.com" />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" placeholder="********" />
+              <Input id="password" name="password" placeholder="********" />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col">
-        <Button>Login</Button>
+        <Button form="login" type="submit">
+          Login
+        </Button>
         <p>
           Not part of blogr? Start your journey{" "}
           <a className="text-blue-400" href="/signup">

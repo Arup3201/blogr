@@ -21,6 +21,7 @@ Best UX Practices for LogIn and Signup: https://medium.com/@fiona.chiaraviglio/b
 function Signup() {
   function handleSignup(event) {
     event.preventDefault();
+    console.log("event: ", event);
 
     const fd = new FormData(event.target);
 
@@ -45,21 +46,23 @@ function Signup() {
         <CardDescription>Start your collaborative blogging</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form id="signup" onSubmit={handleSignup}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="john@example.com" />
+              <Input id="email" name="email" placeholder="john@example.com" />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" placeholder="********" />
+              <Input id="password" name="password" placeholder="********" />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col">
-        <Button>Signup</Button>
+        <Button type="submit" form="signup">
+          Signup
+        </Button>
         <p>
           Already a part of blogr? Resume your journey{" "}
           <a className="text-blue-400" href="/">
