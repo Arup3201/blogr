@@ -1,5 +1,15 @@
 import { GoogleLogin } from "@react-oauth/google";
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 import { Auth } from "../../services/auth.service";
@@ -34,7 +44,38 @@ function Login() {
       .catch((err) => console.log(err.message));
   }
 
-  return <Button>Login</Button>;
+  return (
+    <Card className="mx-auto w-md">
+      <CardHeader>
+        <CardTitle>Login to Blogr</CardTitle>
+        <CardDescription>Resume your collaborative blogging</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" placeholder="john@example.com" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" placeholder="********" />
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-col">
+        <Button>Login</Button>
+        <p>
+          Not part of blogr? Start your journey{" "}
+          <a className="text-blue-400" href="/signup">
+            here
+          </a>
+          .
+        </p>
+      </CardFooter>
+    </Card>
+  );
 }
 
 export default Login;
