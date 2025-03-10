@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import useAuth from "@/hooks/useAuth";
 import { Auth } from "../../services/auth.service";
 
 /*
@@ -25,6 +26,8 @@ Sign Up Rephrased✅
 */
 
 function Login() {
+  const { setAuth } = useAuth();
+
   function handleLogin(event) {
     event.preventDefault();
 
@@ -32,8 +35,11 @@ function Login() {
 
     const data = Object.fromEntries(fd.entries());
     Auth.login(data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        const accessToken = res?.accessToken;
+        setAuth((prev) => ({ ...prev, accessToken }));
+      })
+      .catch((err) => console.error(err));
   }
 
   function onGoogleLogin(response) {

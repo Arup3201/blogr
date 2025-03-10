@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
-import "./App.css";
 
 import Signup from "./auth/signup";
 import Login from "./auth/login";
+import Private from "./private";
 import Home from "./home";
+
+import "./App.css";
 
 function App() {
   return (
@@ -11,14 +13,12 @@ function App() {
       {/* Public routes */}
       <Routes>
         <Route path="/signup" element={<Signup />} />
-      </Routes>
-      <Routes>
         <Route path="/login" element={<Login />} />
-      </Routes>
 
-      {/* Private routes */}
-      <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Private routes */}
+        <Route element={<Private />}>
+          <Route path="/" element={<Home />} />
+        </Route>
       </Routes>
     </Router>
   );

@@ -1,8 +1,12 @@
-const post = async (url, data) => {
-  return fetchService(url, "POST", data);
+const get = async (url, data) => {
+  return makeRequest(url, "GET", data);
 };
 
-const fetchService = async (url, method, body) => {
+const post = async (url, data) => {
+  return makeRequest(url, "POST", data);
+};
+
+const makeRequest = async (url, method, body) => {
   const prefixUrl = "http://localhost/";
   const fullUrl = prefixUrl + url;
   console.log(fullUrl);
@@ -16,4 +20,4 @@ const fetchService = async (url, method, body) => {
   return response.json();
 };
 
-export { post };
+export { post, get };
