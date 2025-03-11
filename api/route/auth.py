@@ -8,6 +8,8 @@ import json, traceback, datetime
 from flask import Blueprint, request, make_response, jsonify
 
 from service.auth import BlogrAuthenticator, GoogleAuthenticator
+from constants import ACCESS_TOKEN_EXPIRES, REFRESH_TOKEN_EXPIRES
+from utils import split_time
 
 auth_app = Blueprint('auth', __name__)
 
@@ -31,9 +33,13 @@ def login():
     
     authenticator = BlogrAuthenticator()
     try:
-        user, token = authenticator.login(email, password)
-        response = make_response(jsonify({"user": user}), 200)
-        response.set_cookie("blogr", token, expires=datetime.datetime.now()+datetime.timedelta(minutes=20), secure=True, httponly=True, samesite="Lax", domain=request.host, path="/")
+        user, access_token, refresh_token = authenticator.login(email, password)
+        
+        response = make_response(jsonify({"user": user, "accessToken": access_token}), 200)
+        
+        time, unit = split_time(REFRESH_TOKEN_EXPIRES)
+        response.set_cookie("blogr", refresh_token, expires=datetime.datetime.now()+datetime.timedelta(**{unit: time}), secure=True, httponly=True, samesite="Lax", domain=request.host, path="/")
+        
         return response
     except Exception as e:
         traceback.print_exc()
@@ -54,6 +60,18 @@ def google_authorize():
         traceback.print_exc()
         return make_response(jsonify({"message": str(e)}), 400)
 
+def refresh_token():
+    token = request.cookies.get('blogr')
+    authenticator = BlogrAuthenticator()
+    
+    try: 
+        access_token = authenticator.refresh_token(token)
+        return make_response(jsonify({'accessToken': access_token}), 200)
+    except Exception as e:
+        traceback.print_exc()
+        return make_response(jsonify({'message': str(e)}), 400)
+
 auth_app.add_url_rule('/signup', view_func=signup, methods=['POST'])
 auth_app.add_url_rule('/login', view_func=login, methods=['POST'])
 auth_app.add_url_rule('/google/authorize', view_func=google_authorize, methods=['POST'])
+auth_app.add_url_rule('/refresh', view_func=refresh_token, methods=['GET'])

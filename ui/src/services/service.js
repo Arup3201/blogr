@@ -1,15 +1,11 @@
-const get = async (url, data) => {
-  return makeRequest(url, "GET", data);
-};
+const BASE_URL = "http://localhost/";
 
-const post = async (url, data) => {
-  return makeRequest(url, "POST", data);
-};
+const POST = "POST";
+const GET = "GET";
 
-const makeRequest = async (url, method, body) => {
-  const prefixUrl = "http://localhost/";
-  const fullUrl = prefixUrl + url;
-  console.log(fullUrl);
+export default service = async (url, method = "GET", body = {}) => {
+  const fullUrl = BASE_URL + url;
+
   const response = await fetch(fullUrl, {
     method,
     headers: {
@@ -20,4 +16,20 @@ const makeRequest = async (url, method, body) => {
   return response.json();
 };
 
-export { post, get };
+const privateService = async (url, method = "GET", token, body = {}) => {
+  const fullUrl = BASE_URL + url;
+
+  const response = await fetch(fullUrl, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: true,
+    body: JSON.stringify(body),
+  });
+
+  return response.json();
+};
+
+export { GET, POST, privateService };

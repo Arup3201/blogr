@@ -4,9 +4,10 @@ from google.oauth2 import id_token
 
 import env_config
 from session import RelationalSession
-from session.models import User
-from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token
-from error import UserNotFound, EmailNotFound, PasswordMismatch, EmailAlreadyExist
+from session.models import User 
+from constants import ACCESS_TOKEN_EXPIRES, REFRESH_TOKEN_EXPIRES
+from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token, split_time
+from error import EmailNotFound, PasswordMismatch, EmailAlreadyExist
 
 class Authenticator:
     def __init__(self):
@@ -41,7 +42,7 @@ class BlogrAuthenticator(Authenticator):
         self.session.add(user)
         self.session.commit()
 
-    def login(self, email:str, password:str, token_expires:int =20, expiry_unit:str ="minutes") -> tuple[dict, str]:
+    def login(self, email:str, password:str) -> tuple[dict, str]:
         '''Login service using blogr API
         
         `expiry_unit`: type str. e.g. days, seconds, microseconds, milliseconds, minutes, hours, weeks
@@ -53,9 +54,13 @@ class BlogrAuthenticator(Authenticator):
         if decrypt_password(user.hash_password, user.password_salt) != password:
             raise PasswordMismatch()
         
-        token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{expiry_unit: token_expires}))
+        time, unit = split_time(ACCESS_TOKEN_EXPIRES)
+        access_token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{unit: time}))
         
-        return user.to_dict(), token
+        time, unit = split_time(REFRESH_TOKEN_EXPIRES)
+        refresh_token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{unit: time}))
+        
+        return user.to_dict(), access_token, refresh_token
     
 class GoogleAuthenticator(Authenticator):
     def authorize(self, credential:str, token_expires:int = 20, expiry_unit:str = "minutes"):

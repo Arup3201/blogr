@@ -1,18 +1,17 @@
-import { post } from "./service";
-import { get as PrivateGet } from "./privateService";
+import service, { privateService, GET, POST } from "./service";
 
 const Auth = {
   login: (data = {}) => {
-    return post("api/auth/login", data);
+    return service("api/auth/login", POST, data);
   },
   signup: (data = {}) => {
-    return post("api/auth/signup", data);
+    return service("api/auth/signup", POST, data);
   },
   refreshToken: (token, data = {}) => {
-    return PrivateGet("api/auth/refresh", token, data);
+    return PrivateGet("api/auth/refresh", GET, token, data);
   },
   googleAuthorize: (data = {}) => {
-    return post("api/auth/google/authorize", data);
+    return service("api/auth/google/authorize", POST, data);
   },
 };
 
