@@ -62,6 +62,9 @@ def google_authorize():
 
 def refresh_token():
     token = request.cookies.get('blogr')
+    if not token:
+        return make_response(jsonify({'message': 'No refresh token found'}), 403)
+    
     authenticator = BlogrAuthenticator()
     
     try: 
@@ -69,7 +72,7 @@ def refresh_token():
         return make_response(jsonify({'accessToken': access_token}), 200)
     except Exception as e:
         traceback.print_exc()
-        return make_response(jsonify({'message': str(e)}), 400)
+        return make_response(jsonify({'message': str(e)}), 403)
 
 auth_app.add_url_rule('/signup', view_func=signup, methods=['POST'])
 auth_app.add_url_rule('/login', view_func=login, methods=['POST'])

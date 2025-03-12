@@ -38,14 +38,14 @@ def validate_jwt_token(token: str) -> dict | JWTTokenError:
     
 def split_time(time_string: str) -> tuple[int, str]:
     if time_string.find(WEEK) > -1:
-        return time_string.split(WEEK)[0], 'weeks'
+        return int(time_string.split(WEEK)[0]), 'weeks'
     
     if time_string.find(HOUR) > -1:
-        return time_string.split(HOUR)[0], 'hours'
+        return int(time_string.split(HOUR)[0]), 'hours'
     
     if time_string.find(MINUTE) > -1:
-        return time_string.split(MINUTE)[0], 'minutes'
+        return int(time_string.split(MINUTE)[0]), 'minutes'
     
     if time_string.find(SECOND) > -1:
-        return time_string.split(SECOND)[0], 'seconds'
+        return int(time_string.split(SECOND)[0]), 'seconds'
     

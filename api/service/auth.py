@@ -62,6 +62,9 @@ class BlogrAuthenticator(Authenticator):
         
         return user.to_dict(), access_token, refresh_token
     
+    def refresh_token(self, refresh_token: str) -> str:
+        return 'New access token'
+    
 class GoogleAuthenticator(Authenticator):
     def authorize(self, credential:str, token_expires:int = 20, expiry_unit:str = "minutes"):
         user_info = id_token.verify_oauth2_token(credential, requests.Request(), env_config.GOOGLE_CLIENT_ID)
