@@ -20,8 +20,18 @@ const service = async (url, method = GET, body = {}) => {
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(fullUrl, options);
-  return response;
+  try {
+    const response = await fetch(fullUrl, options);
+
+    if (response.status >= 400) {
+      const data = await response.json();
+      return Promise.reject(data.message || "Unexpected API error occured");
+    } else {
+      return response;
+    }
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };
 
 const privateService = async (url, method = GET, headers = {}, body = {}) => {
@@ -38,10 +48,19 @@ const privateService = async (url, method = GET, headers = {}, body = {}) => {
     options.body = JSON.stringify(body);
   }
 
-  options.credentials = true;
+  options.credentials = "include";
 
-  const response = await fetch(fullUrl, options);
-  return response;
+  try {
+    const response = await fetch(fullUrl, options);
+    if (response.status >= 400) {
+      const data = await response.json();
+      return Promise.reject(data.message || "Unexpected API error occured");
+    } else {
+      return response;
+    }
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };
 
 export { GET, POST, service, privateService };

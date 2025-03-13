@@ -1,4 +1,4 @@
-import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -15,39 +15,24 @@ import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import { Auth } from "../../services/auth.service";
 
-/*
-Best UX Practices for LogIn and Signup: https://medium.com/@fiona.chiaraviglio/best-practices-for-login-sign-up-from-a-ux-perspective-e5d14b6ffce0
-
-Provide login using Google ✅
-Email Validation
-Password Hide Button✅
-Forgot Password✅
-Sign Up Rephrased✅
-*/
-
 function Login() {
   const { setAuth } = useAuth();
 
-  function handleLogin(event) {
+  async function handleLogin(event) {
     event.preventDefault();
 
     const fd = new FormData(event.target);
+    const formData = Object.fromEntries(fd.entries());
 
-    const data = Object.fromEntries(fd.entries());
-    Auth.login(data)
-      .then((res) => {
-        const accessToken = res?.accessToken;
-        setAuth((prev) => ({ ...prev, accessToken }));
-      })
-      .catch((err) => console.error(err));
-  }
-
-  function onGoogleLogin(response) {
-    Auth.googleAuthorize({
-      credential: response.credential,
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err.message));
+    try {
+      const response = await Auth.login(formData);
+      const data = await response.json();
+      const accessToken = data?.accessToken;
+      setAuth((prev) => ({ ...prev, accessToken }));
+      toast(`Welcome ${data?.user?.email}`);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

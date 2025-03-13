@@ -5,7 +5,7 @@ import useRefreshToken from "@/hooks/useRefreshToken";
 import useAuth from "@/hooks/useAuth";
 
 export default function Private() {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const refresh = useRefreshToken();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +22,7 @@ export default function Private() {
     }
 
     verifyRefreshToken();
-  }, [auth, refresh]);
+  }, []);
 
   return isLoading ? <p>Loading...</p> : <Outlet />;
 }
