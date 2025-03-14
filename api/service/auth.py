@@ -6,7 +6,7 @@ import env_config
 from session import RelationalSession
 from session.models import User 
 from constants import ACCESS_TOKEN_EXPIRES, REFRESH_TOKEN_EXPIRES
-from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token, split_time
+from utils import generate_primary_key, encrypt_password, decrypt_password, get_jwt_token, split_time, validate_jwt_token
 from error import EmailNotFound, PasswordMismatch, EmailAlreadyExist
 
 class Authenticator:
@@ -63,7 +63,15 @@ class BlogrAuthenticator(Authenticator):
         return user.to_dict(), access_token, refresh_token
     
     def refresh_token(self, refresh_token: str) -> str:
-        return 'New access token'
+        payload = validate_jwt_token(refresh_token)
+        user_id = payload['iss']
+        user = self.get_user(user_id)
+        
+        time, unit = split_time(ACCESS_TOKEN_EXPIRES)
+        access_token = get_jwt_token(user.id, user.email, datetime.utcnow()+timedelta(**{unit: time}))
+        
+        return access_token
+        
     
 class GoogleAuthenticator(Authenticator):
     def authorize(self, credential:str, token_expires:int = 20, expiry_unit:str = "minutes"):

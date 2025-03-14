@@ -7,15 +7,18 @@ const usePrivateAPI = () => {
   const { auth, setAuth } = useAuth();
   const refresh = useRefreshToken();
 
-  useEffect(async () => {
-    if (!auth.accessToken) {
+  useEffect(() => {
+    async function refreshToken() {
       try {
         const accessToken = await refresh();
         setAuth((prev) => ({ ...prev, accessToken }));
+        console.log("New Access Token After Refresh: ", accessToken);
       } catch (err) {
         console.error(err);
       }
     }
+
+    !auth.accessToken && refreshToken();
   }, [auth, refresh]);
 
   const privateAPI = async (url, method = GET, body = {}) => {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 import {
   NavigationMenu,
@@ -55,6 +56,8 @@ const authors = [
 ];
 
 function Home() {
+  const navigate = useNavigate();
+
   const privateAPI = usePrivateAPI();
   const [blogs, setBlogs] = useState([]);
 
@@ -62,10 +65,11 @@ function Home() {
     async function getBlogs() {
       try {
         const response = await privateAPI("/api/private/home/blogs", GET);
-        const data = response.json();
+        const data = await response.json();
         setBlogs(data.blogs);
       } catch (err) {
         console.error(err);
+        navigate("/login");
       }
     }
 
@@ -81,8 +85,8 @@ function Home() {
               <NavigationMenuTrigger>Tags</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {tags.map((tag) => (
-                    <li>
+                  {tags.map((tag, i) => (
+                    <li key={`tag-${i}`}>
                       <a
                         className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
                         href={tag.link}
@@ -103,8 +107,8 @@ function Home() {
               <NavigationMenuTrigger>From top authors</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {authors.map((author) => (
-                    <li>
+                  {authors.map((author, i) => (
+                    <li key={`author-${i}`}>
                       <a
                         className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
                         href={author.link}

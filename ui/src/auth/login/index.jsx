@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+import { useNavigate, useLocation } from "react-router";
 
 import {
   Card,
@@ -16,6 +16,9 @@ import useAuth from "@/hooks/useAuth";
 import { Auth } from "../../services/auth.service";
 
 function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { setAuth } = useAuth();
 
   async function handleLogin(event) {
@@ -29,7 +32,9 @@ function Login() {
       const data = await response.json();
       const accessToken = data?.accessToken;
       setAuth((prev) => ({ ...prev, accessToken }));
-      toast(`Welcome ${data?.user?.email}`);
+      console.log("Access Token: ", accessToken);
+      let { from } = location.state || { from: { pathname: "/" } };
+      navigate(from);
     } catch (err) {
       console.error(err);
     }
