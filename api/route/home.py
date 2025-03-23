@@ -9,6 +9,6 @@ from flask import Blueprint, make_response, jsonify
 home_app = Blueprint('home', __name__)
 
 def get_blogs():
-    return make_response(jsonify({'blogs': []}))
+    return make_response(jsonify({'blogs': []}), 200)
 
 home_app.add_url_rule(rule='/blogs', endpoint='blogs', view_func=get_blogs, methods=['GET'])

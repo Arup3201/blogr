@@ -18,8 +18,8 @@ CORS(app)
 
 app.register_blueprint(auth_app, url_prefix='/api/auth')
 
-home_app.register_blueprint(private_app)
-app.register_blueprint(home_app, url_prefix='/api/private/home')
+private_app.register_blueprint(home_app, url_prefix='/home')
+app.register_blueprint(private_app, url_prefix='/api/private')
 
 if __name__=="__main__":
     app.run(port=8081, debug=True)

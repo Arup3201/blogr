@@ -1,5 +1,7 @@
-import { useNavigate, useLocation } from "react-router";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
 
+import { AuthContext } from "@/context/AuthProvider";
 import {
   Card,
   CardHeader,
@@ -12,14 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-import useAuth from "@/hooks/useAuth";
 import { Auth } from "../../services/auth.service";
 
 function Login() {
+  const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const { setAuth } = useAuth();
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -31,10 +30,8 @@ function Login() {
       const response = await Auth.login(formData);
       const data = await response.json();
       const accessToken = data?.accessToken;
-      setAuth((prev) => ({ ...prev, accessToken }));
-      console.log("Access Token: ", accessToken);
-      let { from } = location.state || { from: { pathname: "/" } };
-      navigate(from);
+      setAuth({ accessToken: accessToken });
+      navigate("/");
     } catch (err) {
       console.error(err);
     }

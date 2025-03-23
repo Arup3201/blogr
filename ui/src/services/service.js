@@ -34,11 +34,14 @@ const service = async (url, method = GET, body = {}) => {
   }
 };
 
-const privateService = async (url, method = GET, headers = {}, body = {}) => {
+const privateService = async (url, token, method = GET, body = {}) => {
   const fullUrl = BASE_URL + url;
 
   const options = {};
-  options.headers = { "Content-Type": "application/json", ...headers };
+  options.headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
   if (method === GET) {
     options.method = method;
   }

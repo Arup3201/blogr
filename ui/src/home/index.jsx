@@ -1,137 +1,60 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import usePrivateAPI from "@/hooks/usePrivate";
-import { GET } from "@/services/service";
-
-const SAMPLE_IMAGE =
-  "https://lh3.googleusercontent.com/a/ACg8ocKqUa5riQe85OXVIEQxpHkmLVlWrpSZ4JCK4UxgyOubwuRxeb8t=s288-c-no";
-
-const tags = [
-  {
-    title: "Tech",
-    description: "Blah blah blah",
-    link: "www.google.com",
-  },
-  {
-    title: "Education",
-    description: "Blah blah blah",
-    link: "www.google.com",
-  },
-  {
-    title: "Health",
-    description: "Blah blah blah",
-    link: "www.google.com",
-  },
-];
-const authors = [
-  {
-    title: "Arup",
-    link: "www.google.com",
-    image: SAMPLE_IMAGE,
-  },
-  {
-    title: "Arup",
-    link: "www.google.com",
-    image: SAMPLE_IMAGE,
-  },
-  {
-    title: "Arup",
-    link: "www.google.com",
-    image: SAMPLE_IMAGE,
-  },
-  {
-    title: "Arup",
-    link: "www.google.com",
-    image: SAMPLE_IMAGE,
-  },
-];
+import { AuthContext } from "@/context/AuthProvider";
+import { privateService } from "@/services/service";
+import { Button } from "@/components/ui/button";
 
 function Home() {
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const privateAPI = usePrivateAPI();
-  const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     async function getBlogs() {
       try {
-        const response = await privateAPI("/api/private/home/blogs", GET);
+        const response = await privateService(
+          "/api/private/home/blogs",
+          auth.accessToken,
+        );
         const data = await response.json();
-        setBlogs(data.blogs);
+        console.log(data);
       } catch (err) {
-        console.error(err);
+        console.log(err);
         navigate("/login");
       }
     }
 
-    getBlogs();
-  }, []);
+    if (auth && auth.accessToken) {
+      getBlogs();
+    } else {
+      console.error("No access token found!");
+      navigate("/login");
+    }
+  }, [auth]);
 
   return (
-    <>
-      <nav>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>Tags</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {tags.map((tag, i) => (
-                    <li key={`tag-${i}`}>
-                      <a
-                        className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
-                        href={tag.link}
-                      >
-                        <div className="text-sm leading-none font-medium">
-                          {tag.title}
-                        </div>
-                        <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                          {tag.description}
-                        </p>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>From top authors</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {authors.map((author, i) => (
-                    <li key={`author-${i}`}>
-                      <a
-                        className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
-                        href={author.link}
-                      >
-                        <img src={author.image} />
-                        <div className="text-sm leading-none font-medium">
-                          {author.title}
-                        </div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </nav>
+    <div>
+      <header>Home</header>
       <section>
-        {blogs.map((blog) => (
-          <div>{blog.title}</div>
-        ))}
+        <ul>
+          <li>
+            <Button variant="link" onClick={() => navigate("/account")}>
+              Account
+            </Button>
+          </li>
+          <li>
+            <Button variant="link" onClick={() => navigate("/editor")}>
+              Editor
+            </Button>
+          </li>
+          <li>
+            <Button variant="link" onClick={() => navigate("/blog/1")}>
+              Blog
+            </Button>
+          </li>
+        </ul>
       </section>
-    </>
+    </div>
   );
 }
 
