@@ -55,12 +55,7 @@ const privateService = async (url, token, method = GET, body = {}) => {
 
   try {
     const response = await fetch(fullUrl, options);
-    if (response.status >= 400) {
-      const data = await response.json();
-      return Promise.reject(data.message || "Unexpected API error occured");
-    } else {
-      return response;
-    }
+    return response;
   } catch (err) {
     return Promise.reject(err);
   }

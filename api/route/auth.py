@@ -69,7 +69,7 @@ def refresh_token():
     
     try: 
         access_token = authenticator.refresh_token(token)
-        return make_response(jsonify({'accessToken': access_token}), 200)
+        return make_response(jsonify({"accessToken": access_token}), 200)
     except Exception as e:
         traceback.print_exc()
         return make_response(jsonify({'message': str(e)}), 403)

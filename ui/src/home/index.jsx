@@ -1,36 +1,27 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { AuthContext } from "@/context/AuthProvider";
-import { privateService } from "@/services/service";
 import { Button } from "@/components/ui/button";
 
+import { usePrivate } from "@/hook/usePrivate";
+
 function Home() {
-  const { auth } = useContext(AuthContext);
+  const { privateFetchAPI } = usePrivate();
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getBlogs() {
       try {
-        const response = await privateService(
-          "/api/private/home/blogs",
-          auth.accessToken,
-        );
+        const response = await privateFetchAPI("/api/private/home/blogs");
         const data = await response.json();
         console.log(data);
       } catch (err) {
-        console.log(err);
-        navigate("/login");
+        console.error(err);
       }
     }
 
-    if (auth && auth.accessToken) {
-      getBlogs();
-    } else {
-      console.error("No access token found!");
-      navigate("/login");
-    }
-  }, [auth]);
+    getBlogs();
+  }, []);
 
   return (
     <div>

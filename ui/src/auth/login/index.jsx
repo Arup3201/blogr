@@ -1,7 +1,6 @@
-import { useContext } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { AuthContext } from "@/context/AuthProvider";
 import {
   Card,
   CardHeader,
@@ -14,10 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import { useAuth } from "@/hook/useAuth";
 import { Auth } from "../../services/auth.service";
 
 function Login() {
-  const { setAuth } = useContext(AuthContext);
+  const { isAuthenticated, setAuth, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogin(event) {
@@ -31,11 +31,17 @@ function Login() {
       const data = await response.json();
       const accessToken = data?.accessToken;
       setAuth({ accessToken: accessToken });
-      navigate("/");
+      setIsAuthenticated(true);
     } catch (err) {
       console.error(err);
     }
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <Card className="mx-auto w-md">

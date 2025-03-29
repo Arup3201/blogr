@@ -5,6 +5,7 @@ import AuthProvider from "./context/AuthProvider";
 import Signup from "./auth/signup";
 import Login from "./auth/login";
 
+import PrivateRoute from "./private";
 import Home from "./home";
 import Account from "./account";
 import Editor from "./editor";
@@ -22,10 +23,12 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           {/* Private routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/editor" element={<Editor />} />
-          <Route path="/blog/:blog_id" element={<Blog />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/blog/:blog_id" element={<Blog />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>
